@@ -1,7 +1,5 @@
 
 from telegram.ext import Updater, CommandHandler
-# import urllib.request
-# import urllib.parse
 import requests
 import re
 
