@@ -1,0 +1,28 @@
+{
+    "update_id": 673033041,
+    "message": {
+        "message_id": 132,
+        "from": {
+            "id": 11225633,
+            "is_bot": false,
+            "first_name": "Nando",
+            "username": "Nand0san",
+            "language_code": "en"
+        },
+        "chat": {
+            "id": 11225633,
+            "first_name": "Nando",
+            "username": "Nand0san",
+            "type": "private"
+        },
+        "date": 1572114757,
+        "text": "/btc",
+        "entities": [
+            {
+                "offset": 0,
+                "length": 4,
+                "type": "bot_command"
+            }
+        ]
+    }
+}
