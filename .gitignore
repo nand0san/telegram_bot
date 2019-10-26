@@ -1,3 +1,5 @@
 venv/
-test
+test*
 .idea/
+secret.py
+secret*
