@@ -9,18 +9,21 @@
 
 from secret import coinmarketcap_token
 from secret import apikey_telegram
+
 import requests
 import json
+import re
+
 from flask import Flask
 from flask import request
 from flask import Response
-import re
+from flask_sslify import SSLify
 
 app = Flask(__name__)
+sslify = SSLify(app)
 
 
 def get_coinmarketcap_data(ticker):
-
     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest'
     headers = {'X-CMC_PRO_API_KEY': coinmarketcap_token}
     params = {'symbol': ticker, 'convert': 'USD'}
@@ -34,19 +37,16 @@ def get_coinmarketcap_data(ticker):
 
 def parse_message(message):
     chat_id = message['message']['chat']['id']
-    txt = message['message']['text']            # /btc or /eth
+    txt = message['message']['text']  # /btc or /eth
     pattern = r'/[a-zA-Z]{2,4}'
 
     ticker_msg = re.findall(pattern, txt)  # this returns a list
-    print(ticker_msg)
     if ticker_msg:
         ticker = ticker_msg[0][1:].upper()  # this returns /btc in example
-        print(ticker)
     else:
         ticker = ''
 
     return chat_id, ticker
-
 
 
 def write_json(data, filename='response.json'):
@@ -56,11 +56,12 @@ def write_json(data, filename='response.json'):
 
 def send_message(chat_id, text='bla-bla-bla'):
     url = 'https://api.telegram.org/bot{}/sendMessage'.format(apikey_telegram)
-    payload = {'chat_id': chat_id, 'text': text} # pst method
+    payload = {'chat_id': chat_id, 'text': text}  # pst method
 
     r = requests.post(url, json=payload)
 
     return r
+
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -83,8 +84,7 @@ def index():
 
 
 def main():
-
-    # TODO: BOT
+    # Tasks: BOT
     # 1. CREATE LOCAL FLASK APP
     # 2. SET UP TUNNEL
     # 3. SET A WEBHOOK
@@ -95,12 +95,13 @@ def main():
 
     # https://api.telegram.org/bot--------------apikey----------/getMe
     # https://api.telegram.org/bot--------------apikey----------/getUpdates
-    # notificamos a la api de telegram la url del bot
-    # https://api.telegram.org/bot--------------apikey-----------/setWebhook?url=sisifostation.synology.me:8443
 
-    # https://api.telegram.org/bot------------apikey----------/setWebhook?url=https://careo.serveo.net
 
-    # to get webhook accesible run:     ssh -R 80:localhost:5000 serveo.net
+    # set the webhook
+    # https://api.telegram.org/bot--------apikeytelegram------/setWebhook?url=https://xxxxx.pythonanywhere.com
+    # https://api.telegram.org/bot------------apikey----------/setWebhook?url=https://xxxxx.serveo.net
+
+    # to get webhook accesible from local run:     ssh -R 80:localhost:5000 serveo.net
 
 
 if __name__ == '__main__':
